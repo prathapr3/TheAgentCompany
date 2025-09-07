@@ -1,0 +1,6 @@
+gymnasium[classic-control]
+gymnasium
+numpy
+torch
+pandas
+tensorflow
