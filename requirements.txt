@@ -1,5 +1,4 @@
 gymnasium
-ollama
 numpy
 torch
 pandas
