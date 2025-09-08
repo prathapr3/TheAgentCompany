@@ -1,5 +1,5 @@
-gymnasium[classic-control]
 gymnasium
+ollama
 numpy
 torch
 pandas
