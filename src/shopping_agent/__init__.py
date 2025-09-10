@@ -9,3 +9,5 @@ register(
     entry_point="shopping_agent.web_shopping_environment:WebShoppingEnvironment", # Path to your environment class
     # max_episode_steps=200, # Optional: default max steps
 )
+
+print("Registered the environment.")
