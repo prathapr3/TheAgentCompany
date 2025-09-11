@@ -1,9 +1,9 @@
 import gymnasium as gym
 from gymnasium import spaces
 import numpy as np
-
+from playwright_interface import PlaywrightHandler
 class WebShoppingEnvironment(gym.Env):
-    def __init__(self):
+    def __init__(self, url: str):
         print("WebShoppingEnvironment initialized.")
         super().__init__()
 
@@ -18,9 +18,15 @@ class WebShoppingEnvironment(gym.Env):
         self.current_step = 0
         self.max_episode_steps = 100
 
+        # Initialize the playwright handler or any other web interaction tool here
+        self.browser_handler = PlaywrightHandler()
+        self.browser_handler.navigate_to(url)
+        self.browser_handler.take_screenshot()
+
     def _get_obs(self):
         print("Getting observation.")
         # Return the current observation
+
         return self.current_state
 
     def _get_info(self):
@@ -72,3 +78,6 @@ class WebShoppingEnvironment(gym.Env):
         # Clean up resources (optional)
         pass
 
+if __name__ == "__main__":
+    wse = WebShoppingEnvironment("https://playwright.dev")
+    print(wse._get_obs())

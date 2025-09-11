@@ -3,3 +3,4 @@ numpy
 torch
 pandas
 tensorflow
+pytest-playwright
