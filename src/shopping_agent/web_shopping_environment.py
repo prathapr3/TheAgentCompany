@@ -18,14 +18,14 @@ class WebShoppingEnvironment(gym.Env):
         self.current_step = 0
         self.max_episode_steps = 100
 
-        # Initialize the playwright handler or any other web interaction tool here
+        # Initialize the playwright handler or any other web interaction tool here and initiatialize the first state
         self.browser_handler = PlaywrightHandler()
         self.browser_handler.navigate_to(url)
-        self.browser_handler.take_screenshot()
 
     def _get_obs(self):
         print("Getting observation.")
         # Return the current observation
+        self.current_state = self.browser_handler.take_screenshot()
 
         return self.current_state
 
@@ -79,5 +79,7 @@ class WebShoppingEnvironment(gym.Env):
         pass
 
 if __name__ == "__main__":
-    wse = WebShoppingEnvironment("https://playwright.dev")
-    print(wse._get_obs())
+    wse = WebShoppingEnvironment("https://www.outerknown.com/")
+    wse.close()
+    print("Done")
+    # print(wse._get_obs())

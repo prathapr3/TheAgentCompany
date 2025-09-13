@@ -10,4 +10,4 @@ register(
     # max_episode_steps=200, # Optional: default max steps
 )
 
-print("Registered the environment.")
+# print("Registered the environment.")

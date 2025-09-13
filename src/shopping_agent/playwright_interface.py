@@ -22,7 +22,8 @@ class PlaywrightHandler:
     
     def take_screenshot(self):
         print("Taking screenshot")
-        self.current_state = self.page.screenshot(path = 'current_state.png', type = 'png', full_page=True)
+        self.current_screenshot = self.page.screenshot(path = 'current_state.png', type = 'png', full_page=True)
+        return self.current_screenshot
 
     def close(self):
         self.browser.close()
