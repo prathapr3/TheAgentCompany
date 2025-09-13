@@ -8,7 +8,7 @@ class WebShoppingEnvironment(gym.Env):
         super().__init__()
 
         # Define observation space
-        self.observation_space = spaces.Box(low=0, high=255, shape=(84, 84, 3), dtype=np.uint8)
+        self.observation_space = spaces.Box(low=0, high=255, shape=(84, 84, 3), dtype=np.uint8) # Not sure why we need this
 
         # Define action space
         self.action_space = spaces.Discrete(4) # Example: 4 discrete actions
@@ -16,6 +16,7 @@ class WebShoppingEnvironment(gym.Env):
         # Initialize environment-specific variables
         self.current_state = None
         self.current_step = 0
+        self.home_url = url
         self.max_episode_steps = 100
 
         # Initialize the playwright handler or any other web interaction tool here and initiatialize the first state
@@ -25,7 +26,7 @@ class WebShoppingEnvironment(gym.Env):
     def _get_obs(self):
         print("Getting observation.")
         # Return the current observation
-        self.current_state = self.browser_handler.take_screenshot()
+        self.current_state = self.browser_handler.capture_current_state()
 
         return self.current_state
 

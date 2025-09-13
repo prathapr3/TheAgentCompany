@@ -4,3 +4,8 @@ torch
 pandas
 tensorflow
 pytest-playwright
+ollama
+sentence-transformers
+Pillow
+transformers
+tf-keras

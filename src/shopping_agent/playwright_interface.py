@@ -1,12 +1,14 @@
 import re
 from playwright.sync_api import Page, expect
 from playwright.sync_api import sync_playwright
-
+from web_state_representor import WebStateRepresentor
 class PlaywrightHandler:
     def __init__(self):
         self.playwright_handle = sync_playwright().start()
         self.browser = self.playwright_handle.chromium.launch()
         self.page = self.browser.new_page()
+        self.web_state_representator = WebStateRepresentor()
+        self.current_state = None
 
     def navigate_to(self, url: str):
         self.page.goto(url)
@@ -19,11 +21,13 @@ class PlaywrightHandler:
 
     def fill_input(self, selector: str, text: str):
         self.page.fill(selector, text)
-    
-    def take_screenshot(self):
-        print("Taking screenshot")
-        self.current_screenshot = self.page.screenshot(path = 'current_state.png', type = 'png', full_page=True)
-        return self.current_screenshot
+
+    # Takes a screenshot and returns a representation of the image bytes and website content
+    def capture_current_state(self):
+        current_screenshot = self.page.screenshot(path = 'current_state.png', type = 'png', full_page=True)
+        current_webpage_content = self.page.content()
+        self.current_state = self.web_state_representator.represent_state(current_screenshot, current_webpage_content)
+        return self.current_state
 
     def close(self):
         self.browser.close()
@@ -32,7 +36,7 @@ class PlaywrightHandler:
 if __name__ == "__main__":
     pwh = PlaywrightHandler()
     pwh.navigate_to("https://www.outerknown.com/")
-    pwh.take_screenshot()
+    pwh.capture_current_state()
     print(pwh.get_text("h2"))
     pwh.close()
 
