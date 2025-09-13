@@ -46,14 +46,14 @@ class WebStateRepresentor:
         # Keeping the webpage content as is for now
         self.web_content = webpage_content
 
-        return [self.screenshot_embedding, self.web_content]
+        return {"visual_representation": self.screenshot_embedding, "web_content_representation": self.web_content}
 
 if __name__ == "__main__":
     with open("current_state.png", "rb") as img_file:
         screenshot_bytes = img_file.read()
     webpage_content = "<html><body><h1>Sample Page</h1></body></html>"
     representor = WebStateRepresentor()
-    state_representation = representor.represent_state(screenshot_bytes, webpage_content)
-    print("Screenshot Embedding:", state_representation[0])
-    print("Webpage Content:", state_representation[1])
+    state = representor.represent_state(screenshot_bytes, webpage_content)
+    print("Screenshot Embedding:", state["visual_representation"])
+    print("Webpage Content:", state["web_content_representation"])
     print("WebStateRepresentor test completed.")

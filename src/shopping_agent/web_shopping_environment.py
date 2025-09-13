@@ -1,27 +1,25 @@
 import gymnasium as gym
 from gymnasium import spaces
 import numpy as np
-from playwright_interface import PlaywrightHandler
+from .playwright_interface import PlaywrightHandler
+
+MAX_EPISODE_STEPS = 100
 class WebShoppingEnvironment(gym.Env):
-    def __init__(self, url: str):
+    def __init__(self):
         print("WebShoppingEnvironment initialized.")
         super().__init__()
 
-        # Define observation space
-        self.observation_space = spaces.Box(low=0, high=255, shape=(84, 84, 3), dtype=np.uint8) # Not sure why we need this
-
-        # Define action space
-        self.action_space = spaces.Discrete(4) # Example: 4 discrete actions
-
         # Initialize environment-specific variables
-        self.current_state = None
         self.current_step = 0
-        self.home_url = url
-        self.max_episode_steps = 100
-
-        # Initialize the playwright handler or any other web interaction tool here and initiatialize the first state
+        self.home_url = None
+        self.max_episode_steps = MAX_EPISODE_STEPS
+        self.current_state = None
+        self.home_info = None
         self.browser_handler = PlaywrightHandler()
-        self.browser_handler.navigate_to(url)
+
+        # Define observation and action space
+        self.observation_space = spaces.Box(low=0, high=255, shape=(84, 84, 3), dtype=np.uint8) # Not sure why we need this
+        self.action_space = spaces.Discrete(4) # Need to define an enumeration of actions -- TODO
 
     def _get_obs(self):
         print("Getting observation.")
@@ -38,12 +36,16 @@ class WebShoppingEnvironment(gym.Env):
     def reset(self, *, seed=None, options=None):
         print("Environment reset.")
         super().reset(seed=seed, options=options)
-        # Reset the environment to an initial state
-        self.current_state = self.observation_space.sample() # Example: random initial state
+
+        # Reset the environment to the initial home page state
         self.current_step = 0
-        observation = self._get_obs()
-        info = self._get_info()
-        return observation, info
+        if options:
+            self.home_url = options["home_url"]
+            self.browser_handler.navigate_to(self.home_url)
+            self.current_state = self._get_obs()
+            self.home_info = self._get_info()
+
+        return self.current_state, self.home_info
 
     def step(self, action):
         print(f"Taking action: {action}")

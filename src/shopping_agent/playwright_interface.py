@@ -1,7 +1,7 @@
 import re
 from playwright.sync_api import Page, expect
 from playwright.sync_api import sync_playwright
-from web_state_representor import WebStateRepresentor
+from .web_state_representor import WebStateRepresentor
 class PlaywrightHandler:
     def __init__(self):
         self.playwright_handle = sync_playwright().start()
@@ -36,8 +36,10 @@ class PlaywrightHandler:
 if __name__ == "__main__":
     pwh = PlaywrightHandler()
     pwh.navigate_to("https://www.outerknown.com/")
-    pwh.capture_current_state()
-    print(pwh.get_text("h2"))
+    state = pwh.capture_current_state()
+    print("Screenshot Embedding:", state["visual_representation"])
+    print("Webpage Content:", state["web_content_representation"])
+    print(pwh.get_text("h1"))
     pwh.close()
 
 # def interact_with_website():
