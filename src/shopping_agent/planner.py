@@ -1,5 +1,5 @@
 import ollama
-from .prompts.basic_test import basic_test_prompt
+from .prompts.basic_test import basic_action_generator_prompt, basic_test_prompt
 
 class Planner:
     def __init__(self):
@@ -10,7 +10,11 @@ class Planner:
         # In a real scenario, this would involve complex decision-making
         messages = []
 
-        messages.append({'role': 'user', 'content': basic_test_prompt.format(code_snippet=str(current_state), corrected_code="")})
+        messages.append({'role': 'user', 'content': basic_action_generator_prompt.format(
+            HTML_snippet=current_state["web_content_representation"],
+            IMAGE_snippet=current_state["visual_representation"],
+            selector="<SELECTOR_PLACEHOLDER>"
+        )})
 
         try:
             response = ollama.chat(model='qwen2.5vl:7b', messages=messages)
