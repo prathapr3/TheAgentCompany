@@ -8,28 +8,16 @@ class WebActionWrapper(gym.ActionWrapper):
         self.epsilon = epsilon
 
     def action(self, action: gym.core.WrapperActType) -> gym.core.WrapperActType:
-        print(f"Original action: {action}")
-
-        # Get the env observation first and the decide what action to take
-        # current_state = env.observation_space.sample()  # Placeholder for actual observation
-
-        print(f"Action before epsilon-greedy: {action}")
-        if random.random() < self.epsilon:
-            current_state = self.env.unwrapped._get_obs()
-            print(f"Current state: {current_state}")
-            action = self.env.action_space.sample()
-            print(f"Random action {action}")
-            return action
-
-        print(f"Action after epsilon-greedy: {action}")
+        action = self._identify_best_action()
         return action
 
-    def _identify_best_action(self, current_state) -> int:
-        # Placeholder logic for identifying the best action based on the state
-        # In a real scenario, this could involve a trained model or heuristic
+    def _identify_best_action(self) -> int:
+        self.current_state = self.env.unwrapped._get_obs()
+        # This is where you would implement the logic to identify the best action
+        # For demonstration, we'll use a random action with probability epsilon
         if random.random() < self.epsilon:
             action = self.env.action_space.sample()
-            print(f"Random action {action}")
+            print(f"_identify_best_action::random action {action}")
             return action
         return 0  # Always return action '0' as the best action for demonstration
 
