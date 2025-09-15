@@ -6,7 +6,7 @@ from .playwright_interface import PlaywrightHandler
 MAX_EPISODE_STEPS = 100
 class WebShoppingEnvironment(gym.Env):
     def __init__(self):
-        print("WebShoppingEnvironment initialized.")
+        # print("WebShoppingEnvironment initialized.")
         super().__init__()
 
         # Initialize environment-specific variables
@@ -22,7 +22,7 @@ class WebShoppingEnvironment(gym.Env):
         self.action_space = spaces.Discrete(4) # Need to define an enumeration of actions -- TODO
 
     def _get_obs(self):
-        print("Getting observation.")
+        # print("Getting observation.")
         # Return the current observation
         self.current_state = self.browser_handler.capture_current_state()
 
@@ -30,11 +30,11 @@ class WebShoppingEnvironment(gym.Env):
 
     def _get_info(self):
         # Return any auxiliary information (optional)
-        print("Getting info.")
+        # print("Getting info.")
         return {"current_step": self.current_step}
 
     def reset(self, *, seed=None, options=None):
-        print("Environment reset.")
+        # print("Environment reset.")
         super().reset(seed=seed, options=options)
 
         # Reset the environment to the initial home page state
@@ -48,8 +48,9 @@ class WebShoppingEnvironment(gym.Env):
         return self.current_state, self.home_info
 
     def step(self, action):
-        print(f"Taking action: {action}")
-        # Apply the action and update the environment state
+        # print(f"Taking action: {action}")
+        # Assuming the base class has taken care of action
+
         # Calculate reward, determine if episode is terminated/truncated
         self.current_step += 1
         reward = 0.0
@@ -61,28 +62,29 @@ class WebShoppingEnvironment(gym.Env):
             reward = 1.0
         if self.current_step >= self.max_episode_steps:
             truncated = True
-
-        self.current_state = self.observation_space.sample() # Example: random next state
+        if self.browser_handler.is_checkout_complete():
+            terminated = True
+            reward = 10.0  # Reward for completing checkout
 
         observation = self._get_obs()
         info = self._get_info()
         return observation, reward, terminated, truncated, info
 
     def render(self):
-        print("Rendering environment.")
-        # Implement rendering logic (optional)
-        if self.render_mode == "rgb_array":
-            return np.zeros((84, 84, 3), dtype=np.uint8) # Example: return a black image
-        # For "human" mode, display a window or print to console
+        # # print("Rendering environment.")
+        # # Implement rendering logic (optional)
+        # if self.render_mode == "rgb_array":
+        #     return np.zeros((84, 84, 3), dtype=np.uint8) # Example: return a black image
+        # # For "human" mode, display a window or print to console
         pass
 
     def close(self):
-        print("Closing environment.")
+        # print("Closing environment.")
         # Clean up resources (optional)
         pass
 
 if __name__ == "__main__":
-    wse = WebShoppingEnvironment("https://www.outerknown.com/")
+    wse = WebShoppingEnvironment()
     wse.close()
     print("Done")
     # print(wse._get_obs())

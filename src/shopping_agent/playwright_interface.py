@@ -22,6 +22,16 @@ class PlaywrightHandler:
     def fill_input(self, selector: str, text: str):
         self.page.fill(selector, text)
 
+    def is_checkout_complete(self) -> bool:
+        # Example logic to determine if checkout is complete
+        try:
+            confirmation_text = self.page.inner_text("body")
+            if re.search(r"Thank you for your order", confirmation_text, re.IGNORECASE):
+                return True
+        except:
+            return False
+        return False
+
     # Takes a screenshot and returns a representation of the image bytes and website content
     def capture_current_state(self):
         current_screenshot = self.page.screenshot(path = 'current_state.png', type = 'png', full_page=True)
