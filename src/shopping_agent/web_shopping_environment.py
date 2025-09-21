@@ -48,7 +48,6 @@ class WebShoppingEnvironment(gym.Env):
         return self.current_state, self.home_info
 
     def step(self, action):
-        # print(f"Taking action: {action}")
         # Assuming the base class has taken care of action
 
         # Calculate reward, determine if episode is terminated/truncated

@@ -14,21 +14,24 @@ class WebActionWrapper(gym.ActionWrapper):
 
         return action
 
-    def _act(self, action: int):
+    def _act(self, action: tuple):
         print(f"Executing action: {action}")
         self.browser_handler = self.env.unwrapped.browser_handler
 
-        # Map the action integer to specific environment actions
-        if action == 0:
-            self.env.unwrapped.browser_handler.click_element("a[href*='add-to-cart']")
-        elif action == 1:
-            self.env.unwrapped.browser_handler.click_element("a[href*='cart']")
-        elif action == 2:
-            self.env.unwrapped.browser_handler.click_element("a[href*='checkout']")
-        elif action == 3:
-            self.env.unwrapped.browser_handler.click_element("a[href*='home']")
-        else:
-            raise ValueError(f"Unknown action: {action}")
+        # Click on the coordinates returned by the planner
+        self.env.unwrapped.browser_handler.click_at_position(action[0], action[1])
+
+        # # Map the action integer to specific environment actions
+        # if action == 0:
+        #     self.env.unwrapped.browser_handler.click_element("a[href*='add-to-cart']")
+        # elif action == 1:
+        #     self.env.unwrapped.browser_handler.click_element("a[href*='cart']")
+        # elif action == 2:
+        #     self.env.unwrapped.browser_handler.click_element("a[href*='checkout']")
+        # elif action == 3:
+        #     self.env.unwrapped.browser_handler.click_element("a[href*='home']")
+        # else:
+        #     raise ValueError(f"Unknown action: {action}")
 
     def _identify_best_action(self) -> int:
         print("Identifying best action using planner.")

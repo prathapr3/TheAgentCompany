@@ -7,6 +7,7 @@ class PlaywrightHandler:
         self.playwright_handle = sync_playwright().start()
         self.browser = self.playwright_handle.chromium.launch()
         self.page = self.browser.new_page()
+        self.page.set_viewport_size({"width": 1920, "height": 3020}) # Set viewport size to 1920x3020
         self.web_state_representator = WebStateRepresentor()
         self.current_state = None
 
@@ -15,6 +16,12 @@ class PlaywrightHandler:
 
     def click_element(self, selector: str):
         self.page.click(selector)
+
+    def click_at_position(self, x: int, y: int):
+        print(f"Clicking at position: ({x}, {y})")
+        self.page.mouse.click(x, y)
+        self.page.wait_for_timeout(2000)  # wait for 2 seconds to allow page to load
+        self.page.screenshot(path = 'clicked_state.png', type = 'png', full_page=True)
 
     def get_text(self, selector: str) -> str:
         return self.page.inner_text(selector)
