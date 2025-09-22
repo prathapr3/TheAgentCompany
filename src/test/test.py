@@ -14,6 +14,15 @@ def draw_and_save_pillow(image_path, coords, output_path):
         # Open the image
         image = Image.open(image_path)
         
+        # Print image size for debugging
+        print(f"Filename: {image.filename}")
+        print(f"Format: {image.format}")
+        print(f"Mode: {image.mode}")
+        print(f"Size: {image.size} (width, height)")
+        print(f"Width: {image.width} pixels")
+        print(f"Height: {image.height} pixels")
+        print(f"Info: {image.info}") # Dictionary
+
         # Create a drawing object
         draw = ImageDraw.Draw(image)
         
@@ -34,5 +43,5 @@ if __name__ == "__main__":
     # Example usage
     # Replace 'input.jpg' with your image file and adjust the coordinates.
     # The coordinates are (x_start, y_start, x_end, y_end).
-    coordinates = (1475, 975, 1525, 1025)
+    coordinates = (475, 485, 495, 505)
     draw_and_save_pillow('current_state.png', coordinates, 'output_pillow.png')
