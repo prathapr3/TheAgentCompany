@@ -13,6 +13,8 @@ class PlaywrightHandler:
 
     def navigate_to(self, url: str):
         self.page.goto(url)
+        #self.page.wait_for_load_state("networkidle")  # wait until network is idle
+        self.page.wait_for_timeout(2000)
 
     def click_element(self, selector: str):
         self.page.click(selector)
